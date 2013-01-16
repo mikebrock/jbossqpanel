@@ -1,0 +1,3 @@
+org.jboss.qpanel.client.local.QuestionPanel
+org.jboss.qpanel.client.shared.Question
+org.jboss.qpanel.client.local.QuestionWidget
