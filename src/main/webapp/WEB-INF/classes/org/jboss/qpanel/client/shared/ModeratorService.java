@@ -18,4 +18,6 @@ public interface ModeratorService {
   public void markAnswered(int id);
 
   public void deleteQuestion(int id);
+
+  public void reset();
 }

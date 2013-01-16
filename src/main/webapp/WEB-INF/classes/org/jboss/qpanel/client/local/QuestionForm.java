@@ -23,6 +23,7 @@ import javax.inject.Inject;
 public class QuestionForm extends Composite {
   @Inject @DataField TextArea questionText;
   @Inject @DataField Button askQuestion;
+  @Inject @DataField Button cancel;
 
   @Inject RootPanel rootPanel;
 
@@ -39,6 +40,11 @@ public class QuestionForm extends Composite {
       }
     }).submitQuestion(questionText.getValue());
 
+    cancelClick(event);
+  }
+
+  @EventHandler("cancel")
+  public void cancelClick(ClickEvent event) {
     beanManager.destroyBean(this);
   }
 

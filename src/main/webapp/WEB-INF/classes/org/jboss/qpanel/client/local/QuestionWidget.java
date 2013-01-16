@@ -10,6 +10,8 @@ import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.databinding.client.api.DataBinder;
 import org.jboss.errai.databinding.client.api.InitialState;
+import org.jboss.errai.databinding.client.api.PropertyChangeEvent;
+import org.jboss.errai.databinding.client.api.PropertyChangeHandler;
 import org.jboss.errai.ui.client.widget.HasModel;
 import org.jboss.errai.ui.shared.api.annotations.AutoBound;
 import org.jboss.errai.ui.shared.api.annotations.Bound;
@@ -49,9 +51,7 @@ public class QuestionWidget extends Composite implements HasModel<Question> {
       deleteButton.setVisible(false);
     }
 
-    if (getModel().isAnswered()) {
-      getElement().getStyle().setOpacity(0.2);
-    }
+    getElement().getStyle().setOpacity(0.6);
   }
 
   @Override
@@ -62,6 +62,26 @@ public class QuestionWidget extends Composite implements HasModel<Question> {
   @Override
   public void setModel(Question model) {
     dataBinder.setModel(model, InitialState.FROM_MODEL);
+    if (getModel().isAnswered()) {
+      getElement().getStyle().setOpacity(0.2);
+    }
+    else {
+
+      final int idx = sessionControl.getQuestionList().indexOf(model);
+      switch (idx) {
+        case 0:
+          getElement().getStyle().setOpacity(1);
+          break;
+        case 1:
+          getElement().getStyle().setOpacity(0.8);
+          break;
+        case 2:
+          getElement().getStyle().setOpacity(0.6);
+          break;
+        default:
+          getElement().getStyle().setOpacity(0.5);
+      }
+    }
   }
 
   @EventHandler("vote")

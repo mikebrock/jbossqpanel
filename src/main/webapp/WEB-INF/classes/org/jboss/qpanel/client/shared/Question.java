@@ -70,7 +70,7 @@ public class Question implements Comparable<Question> {
   }
 
   public int getVotes() {
-    return votes;
+    return answered ? -1 : votes;
   }
 
   public void setVotes(int votes) {
@@ -79,7 +79,7 @@ public class Question implements Comparable<Question> {
 
   @Override
   public int compareTo(Question o) {
-    return answered ? 1 : (o.getVotes() - getVotes());
+    return o.getVotes() - getVotes();
   }
 
   @Override
