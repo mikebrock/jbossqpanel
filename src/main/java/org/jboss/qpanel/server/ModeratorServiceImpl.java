@@ -156,7 +156,12 @@ public class ModeratorServiceImpl implements ModeratorService {
   }
 
   private UserSession getUserSession() {
-    return (UserSession) RpcContext.getHttpSession().getAttribute(USER_SESSION_ATTRIB);
+    UserSession session = (UserSession) RpcContext.getHttpSession().getAttribute(USER_SESSION_ATTRIB);
+    if (session != null && session.isInvalid()) {
+      session = null;
+      RpcContext.getHttpSession().removeAttribute(USER_SESSION_ATTRIB);
+    }
+    return session;
   }
 
   private List<Question> getQuestionList() {

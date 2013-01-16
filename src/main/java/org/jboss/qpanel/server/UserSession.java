@@ -15,6 +15,7 @@ public class UserSession {
   private String name;
   private Set<Integer> voteRecord = new HashSet<Integer>();
   private boolean moderator;
+  private boolean invalid;
 
   public UserSession(String email, String name, boolean moderator) {
     this.created = new Date();
@@ -49,5 +50,13 @@ public class UserSession {
 
   public UserData asUserData() {
     return new UserData(getName(), getEmail());
+  }
+
+  public boolean isInvalid() {
+    return invalid;
+  }
+
+  public void setInvalid(boolean invalid) {
+    this.invalid = invalid;
   }
 }
