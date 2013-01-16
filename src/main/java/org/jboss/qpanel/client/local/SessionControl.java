@@ -124,4 +124,9 @@ public class SessionControl {
     Collections.sort(list);
     return list;
   }
+
+  public void clear() {
+    questionsMap.clear();
+    userDataMap.clear();
+  }
 }

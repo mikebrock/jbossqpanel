@@ -3,6 +3,7 @@ package org.jboss.qpanel.server;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.jboss.errai.bus.server.api.RpcContext;
 import org.jboss.qpanel.client.shared.AuthenticationResponse;
+import org.jboss.qpanel.client.shared.Clear;
 import org.jboss.qpanel.client.shared.Deleted;
 import org.jboss.qpanel.client.shared.MarkAnswered;
 import org.jboss.qpanel.client.shared.ModeratorService;
@@ -47,6 +48,7 @@ public class ModeratorServiceImpl implements ModeratorService {
   @Inject Event<VoteEvent> voteEvent;
   @Inject Event<MarkAnswered> markAnswered;
   @Inject Event<Deleted> deleted;
+  @Inject Event<Clear> clear;
 
   @PostConstruct
   public void setup() {
@@ -136,6 +138,16 @@ public class ModeratorServiceImpl implements ModeratorService {
     if (userSession != null && userSession.isModerator()) {
       questionMap.remove(id);
       deleted.fire(new Deleted(id));
+    }
+  }
+
+  @Override
+  public void reset() {
+    final UserSession userSession = getUserSession();
+    if (userSession != null && userSession.isModerator()) {
+      questionMap.clear();
+      sessions.clear();
+      clear.fire(new Clear());
     }
   }
 
