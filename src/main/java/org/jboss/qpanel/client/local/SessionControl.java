@@ -128,5 +128,6 @@ public class SessionControl {
   public void clear() {
     questionsMap.clear();
     userDataMap.clear();
+    authenticated = false;
   }
 }

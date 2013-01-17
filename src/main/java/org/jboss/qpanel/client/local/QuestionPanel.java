@@ -1,6 +1,7 @@
 package org.jboss.qpanel.client.local;
 
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -133,6 +134,13 @@ public class QuestionPanel extends Composite {
     sessionControl.clear();
     refreshQuestions();
     refreshUsers();
+
+
+    sessionButton.setVisible(true);
+    askQuestion.setVisible(false);
+    reset.setVisible(false);
+
+    Window.alert("The moderator reset the question panel. You have been logged out.");
   }
 
 

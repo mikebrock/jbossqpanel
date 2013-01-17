@@ -146,7 +146,13 @@ public class ModeratorServiceImpl implements ModeratorService {
     final UserSession userSession = getUserSession();
     if (userSession != null && userSession.isModerator()) {
       questionMap.clear();
+
+      for (UserSession session : sessions.values()) {
+        session.setInvalid(true);
+      }
+
       sessions.clear();
+
       clear.fire(new Clear());
     }
   }
