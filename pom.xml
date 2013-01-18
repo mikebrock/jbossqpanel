@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <name>qpanel</name>
   <groupId>org.jboss.qpanel</groupId>
@@ -21,7 +21,26 @@
     <uel.impl.version>2.1.2-b04</uel.impl.version>
   </properties>
 
+
   <dependencies>
+    <!-- Import the JPA API, we use provided scope as the API is included
+       in JBoss AS 7 -->
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.0-api</artifactId>
+      <version>1.0.1.Final</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Import the JPA API, we use provided scope as the API is included
+       in JBoss AS 7 -->
+    <dependency>
+      <groupId>org.jboss.spec.javax.transaction</groupId>
+      <artifactId>jboss-transaction-api_1.1_spec</artifactId>
+      <version>1.0.1.Final</version>
+      <scope>provided</scope>
+    </dependency>
+
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
@@ -119,10 +138,10 @@
     </dependency>
 
     <dependency>
-       <groupId>org.jboss.errai</groupId>
-       <artifactId>errai-data-binding</artifactId>
-       <version>${errai.version}</version>
-     </dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-data-binding</artifactId>
+      <version>${errai.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.jboss.errai</groupId>
@@ -714,7 +733,8 @@
               <warSourceDirectory>src/main/webapp/</warSourceDirectory>
               <webappDirectory>src/main/webapp/</webappDirectory>
               <webXml>src/jetty/web.xml</webXml>
-              <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+              <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@
+              </outputFileNameMapping>
               <packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class</packagingExcludes>
               <outputDirectory>deployments</outputDirectory>
             </configuration>
@@ -730,13 +750,13 @@
                 <phase>prepare-package</phase>
                 <configuration>
                   <tasks>
-                    <copy file="src/jboss/web.xml" toDir="src/main/webapp/WEB-INF" overwrite="true" />
+                    <copy file="src/jboss/web.xml" toDir="src/main/webapp/WEB-INF" overwrite="true"/>
 
-                    <delete file="src/main/webapp/WEB-INF/jetty-env.xml" />
-                    <delete file="src/main/webapp/WEB-INF/classes/jndi.properties" />
+                    <delete file="src/main/webapp/WEB-INF/jetty-env.xml"/>
+                    <delete file="src/main/webapp/WEB-INF/classes/jndi.properties"/>
 
                     <copy todir="src/main/webapp/app/">
-                      <fileset dir="war.cache/app/" />
+                      <fileset dir="war.cache/app/"/>
                     </copy>
                   </tasks>
                 </configuration>
@@ -924,7 +944,8 @@
               <warSourceDirectory>war.cache</warSourceDirectory>
               <webappDirectory>war.cache</webappDirectory>
               <webXml>src/jetty/web.xml</webXml>
-              <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+              <outputFileNameMapping>@{artifactId}@-@{baseVersion}@@{dashClassifier?}@.@{extension}@
+              </outputFileNameMapping>
               <packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class</packagingExcludes>
 
               <archive>
@@ -945,29 +966,29 @@
                 <phase>prepare-package</phase>
                 <configuration>
                   <tasks>
-                    <copy file="src/jboss/web.xml" toDir="src/main/webapp/WEB-INF" overwrite="true" />
+                    <copy file="src/jboss/web.xml" toDir="src/main/webapp/WEB-INF" overwrite="true"/>
 
-                    <delete file="src/main/webapp/WEB-INF/jetty-env.xml" />
+                    <delete file="src/main/webapp/WEB-INF/jetty-env.xml"/>
 
-                    <delete file="src/main/webapp/WEB-INF/classes/jndi.properties" />
+                    <delete file="src/main/webapp/WEB-INF/classes/jndi.properties"/>
 
                     <copy todir="war.cache/app/">
-                      <fileset dir="src/main/webapp/app/" />
+                      <fileset dir="src/main/webapp/app/"/>
                     </copy>
 
                     <exec executable="git">
-                      <arg value="add" />
-                      <arg value="war.cache" />
+                      <arg value="add"/>
+                      <arg value="war.cache"/>
                     </exec>
 
                     <exec executable="git">
-                      <arg value="commit" />
-                      <arg value="-a" />
-                      <arg value="-m" />
-                      <arg value="'commit war.cache'" />
+                      <arg value="commit"/>
+                      <arg value="-a"/>
+                      <arg value="-m"/>
+                      <arg value="'commit war.cache'"/>
                     </exec>
 
-                    <echo message="Openshift Prepared!" />
+                    <echo message="Openshift Prepared!"/>
                   </tasks>
                 </configuration>
                 <goals>
@@ -1222,6 +1243,15 @@
   <build>
     <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
 
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -1354,7 +1384,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute />
+                    <execute/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -1367,7 +1397,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>

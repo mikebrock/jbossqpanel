@@ -1,6 +1,7 @@
 package org.jboss.qpanel.client.local;
 
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -36,7 +37,6 @@ public class QuestionForm extends Composite {
     moderatorService.call(new RemoteCallback<Void>() {
       @Override
       public void callback(Void response) {
-
       }
     }).submitQuestion(questionText.getValue());
 

@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +43,7 @@ public class ModeratorServiceImpl implements ModeratorService {
       = new ConcurrentHashMap<Integer, Question>();
 
   private String moderatorEmail;
+  private String moderatorPassword;
 
   @Inject Event<NewQuestion> questionEvent;
   @Inject Event<UserJoin> userJoinEvent;
@@ -56,6 +58,7 @@ public class ModeratorServiceImpl implements ModeratorService {
       final ResourceBundle moderatorConfig = ResourceBundle.getBundle("ModeratorConfig");
 
       moderatorEmail = moderatorConfig.getString("moderator.email");
+      moderatorPassword = moderatorConfig.getString("moderator.password");
     }
     catch (Throwable e) {
       e.printStackTrace();
@@ -77,9 +80,15 @@ public class ModeratorServiceImpl implements ModeratorService {
   }
 
   @Override
-  public AuthenticationResponse authenticate(String email, String name) {
-    final UserSession userSession = new UserSession(email, name, email.equals(moderatorEmail));
-    sessions.put(email, userSession);
+  public AuthenticationResponse authenticate(String email, String name, String password) {
+    final UserSession userSession;
+    if (email.equals(moderatorEmail) && password.equals(moderatorPassword)) {
+      userSession =  new UserSession(email, name, true);
+    }
+    else {
+      return new AuthenticationResponse(false, "Login Denied!", null,
+          getCurrentUserData(), getQuestionList(), false);
+    }
 
     RpcContext.getHttpSession().setAttribute(USER_SESSION_ATTRIB, userSession);
 
@@ -105,15 +114,13 @@ public class ModeratorServiceImpl implements ModeratorService {
   public void voteFor(int id) {
     final UserSession userSession = getUserSession();
     if (userSession != null) {
-
       if (!userSession.hasVoted(id)) {
-
         final Question question = questionMap.get(id);
         if (question != null) {
           synchronized (question) {
             question.setVotes(question.getVotes() + 1);
             userSession.recordVote(id);
-            voteEvent.fire(new VoteEvent(id, question.getVotes()));
+            voteEvent.fire(new VoteEvent(id, question.getVotes(), userSession.asUserData()));
           }
         }
       }

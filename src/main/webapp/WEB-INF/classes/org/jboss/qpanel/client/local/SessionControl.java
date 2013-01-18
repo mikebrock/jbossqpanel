@@ -1,5 +1,6 @@
 package org.jboss.qpanel.client.local;
 
+import com.google.gwt.user.client.Window;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.ioc.client.api.AfterInitialization;
@@ -46,29 +47,25 @@ public class SessionControl {
     }).load();
   }
 
-
-  public void authenticate(final String name, final String email) {
+  public void authenticate(final String name, final String email, final String password) {
     moderatorServiceCaller.call(new RemoteCallback<AuthenticationResponse>() {
       @Override
       public void callback(AuthenticationResponse response) {
         handleAuth(response);
       }
-    }).authenticate(name, email);
+    }).authenticate(name, email, password);
   }
 
   private void handleAuth(AuthenticationResponse response) {
     updateUserMap(response.getUserSessions());
     updateQuestions(response.getQuestions());
-
-    System.out.println(response.getQuestions());
-
     if (response.isAuthenticated()) {
       authenticated = true;
       moderator = response.isModerator();
       loggedInEvent.fire(new LoggedIn(response.getUserData()));
     }
     else {
-      loadEvent.fire(new LoadEvent());
+      Window.alert("Authentication failed!");
     }
   }
 
@@ -128,5 +125,6 @@ public class SessionControl {
   public void clear() {
     questionsMap.clear();
     userDataMap.clear();
+    authenticated = false;
   }
 }

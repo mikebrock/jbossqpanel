@@ -9,7 +9,7 @@ import org.jboss.errai.bus.server.annotations.Remote;
 public interface ModeratorService {
   public AuthenticationResponse load();
 
-  public AuthenticationResponse authenticate(String email, String name);
+  public AuthenticationResponse authenticate(String email, String name, String password);
 
   public void submitQuestion(String questionText);
 

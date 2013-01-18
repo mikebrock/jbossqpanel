@@ -10,10 +10,14 @@ import org.jboss.errai.marshalling.client.api.annotations.MapsTo;
 public class VoteEvent {
   private final int id;
   private final int voteScore;
+  private final UserData userData;
 
-  public VoteEvent(@MapsTo("id") int id, @MapsTo("voteScore") int voteScore) {
+  public VoteEvent(@MapsTo("id") int id,
+                   @MapsTo("voteScore") int voteScore,
+                   @MapsTo("userData") UserData userData) {
     this.id = id;
     this.voteScore = voteScore;
+    this.userData = userData;
   }
 
   public int getId() {
@@ -22,5 +26,9 @@ public class VoteEvent {
 
   public int getVoteScore() {
     return voteScore;
+  }
+
+  public UserData getUserData() {
+    return userData;
   }
 }

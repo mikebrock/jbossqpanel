@@ -18,6 +18,8 @@ import javax.inject.Inject;
 public class SignInPanel extends Composite {
   @Inject @DataField private TextBox email;
   @Inject @DataField private TextBox userName;
+  @Inject @DataField private TextBox password;
+
   @Inject @DataField private Button joinButton;
 
   @Inject RootPanel rootPanel;
@@ -29,7 +31,7 @@ public class SignInPanel extends Composite {
     event.preventDefault();
     event.stopPropagation();
 
-    sessionControl.authenticate(email.getValue(), userName.getValue());
+    sessionControl.authenticate(email.getValue(), userName.getValue(), password.getValue());
 
     rootPanel.remove(this);
   }
